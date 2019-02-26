@@ -1,14 +1,30 @@
 <ion-header>
   <ion-navbar>
-    <ion-title>
-      Ionic Blank
+    <ion-title class="pageTitle">
+        Asteroid scanner
     </ion-title>
   </ion-navbar>
 </ion-header>
 
-<ion-content padding>
-  The world is your oyster.
-  <p>
-    If you get lost, the <a href="http://ionicframework.com/docs/v2">docs</a> will be your guide.
-  </p>
+<ion-content class="content">
+
+  <ion-item class="dateBox">
+      <ion-label class="dateLabel">Search by date: </ion-label>
+      <ion-datetime class="dateItem" displayFormat="DD-MM-YYYY" [(ngModel)]="pickedDate" (ionChange)="getNewData()"></ion-datetime>
+  </ion-item> 
+
+  <div class="loading" *ngIf="!isLoaded">
+      <ion-spinner class="loading"></ion-spinner>
+  </div>
+
+  <ion-card class="chart-card">
+    <ion-card-header>
+      Objects near earth today: {{numberOfNeo}}
+    </ion-card-header>
+    <ion-card-content id="canvasParent" style="position: relative; height:80vh; width:100vw">
+      <canvas #bubbleCanvas id="canvas">
+          
+      </canvas>
+    </ion-card-content>
+  </ion-card>
 </ion-content>

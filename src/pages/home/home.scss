@@ -1,3 +1,32 @@
 page-home {
-
+    body {
+        margin: 0;
+        padding: 0;
+    }
+    .pageTitle {
+        
+    }
+    .content {
+        background: rgb(37, 174, 238);
+    }
+    .dateBox {
+        background: grey;
+    }
+    .dateLabel {
+        color: rgb(255, 255, 255);
+        font-size: 2rem;
+    }
+    .dateItem {
+        margin-right: 1.2rem;
+        color: white;
+        font-size: 2rem;
+    }
+    .loading {
+        display: block;
+        margin: auto;
+        padding: 1rem;
+    }
+    .item-inner {
+        border-bottom: none !important;
+    }
 }
