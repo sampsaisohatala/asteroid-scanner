@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { AsteroidsProvider } from '../../providers/asteroids/asteroids';
 import { DatePipe } from '@angular/common';
@@ -9,22 +9,19 @@ import { Chart } from 'chart.js';
   templateUrl: 'home.html'
 })
 export class HomePage {
-  //@ViewChild('bubbleCanvas') bubbleCanvas;
   bubbleBar: any;
   asteroids: any;
   currentDate: any;
   pickedDate: any;
   numberOfNeo: number;
   isLoaded: boolean;
-
+  canvas: any;
 
   public diameters: any = [];
   public names: any = [];
   public missDistances: any = [];
   public velocities: any = [];
   public datasets: any = [];
-
-  canvas: any;
 
   constructor(public navCtrl: NavController,private asteroidsProvider: AsteroidsProvider, private datePipe: DatePipe) {
     this.isLoaded = false;
@@ -34,7 +31,6 @@ export class HomePage {
   }
 
   ionViewDidLoad() {
-    //console.log("koti sivu did load");
     this.asteroidsProvider.getAllNeoAsteroids(this.pickedDate).subscribe(data => { 
       this.asteroids = data.near_earth_objects[this.currentDate];
       console.log(this.asteroids);
@@ -49,12 +45,9 @@ export class HomePage {
     this.getVelocity();
     this.getMissDistance();
     this.createDatasets();
-
-
     this.canvas = document.getElementById('canvas');
 
-    this.bubbleBar = new Chart(this.canvas, {
-      
+    this.bubbleBar = new Chart(this.canvas, {    
       type: 'bubble',
       data: {
         labels: "",
@@ -63,7 +56,6 @@ export class HomePage {
       options: {
         responsive: true,
         aspectRatio: .7,
-        
         scales: {
           scaleLabel: {
             fontSize: 1
@@ -71,7 +63,7 @@ export class HomePage {
           yAxes: [{ 
             scaleLabel: {
               display: true,
-              labelString: "Relative velocity m/s"
+              labelString: "Relative velocity km/s"
             }
           }],
           xAxes: [{ 
@@ -91,10 +83,8 @@ export class HomePage {
     }
 
     for (let i = 0; i < this.numberOfNeo; i++) {
-      let color = "rgba(0,0,0,0.2)";     
-      if(this.asteroids[i].is_potentially_hazardous_asteroid){
-        color = "rgba(255,0,0,0.2)"
-      }
+
+      let color = !this.asteroids[i].is_potentially_hazardous_asteroid ? "rgba(0,0,0,0.2)" : "rgba(255,0,0,0.2)";
 
       let dataset: any;
       dataset={
@@ -109,42 +99,33 @@ export class HomePage {
       }
       this.datasets.push(dataset);
     }
-    //console.log(this.datasets);
   }
 
   getNames() {
-    //console.log("getting names");
     for (let i = 0; i < this.numberOfNeo; i++) {
       let name: number = this.asteroids[i].name;
-      this.names.push(name);
-      //console.log(this.asteroids[i].name);   
+      this.names.push(name);  
     }
   }
 
   getDiameters() {
-    //console.log("getting diameters");
     for (let i = 0; i < this.numberOfNeo; i++) {
       let dm: number = this.asteroids[i].estimated_diameter.meters.estimated_diameter_max;
       this.diameters.push(dm);
-      //console.log(this.asteroids[i].estimated_diameter.meters.estimated_diameter_max);   
     }
   }
 
   getMissDistance() {
-    //console.log("getting miss distance");
     for (let i = 0; i < this.numberOfNeo; i++) {
       let distance: number = this.asteroids[i].close_approach_data[0].miss_distance.kilometers;
       this.missDistances.push(distance);
-      //console.log(this.asteroids[i].close_approach_data[0].miss_distance.kilometers);   
     }
   }
 
   getVelocity() {
-    //console.log("getting velocity");
     for (let i = 0; i < this.numberOfNeo; i++) {
       let velocity: number = this.asteroids[i].close_approach_data[0].relative_velocity.kilometers_per_second;
       this.velocities.push(velocity);
-      //console.log(this.asteroids[i].close_approach_data[0].relative_velocity.kilometers_per_second);   
     }
   }
 
